@@ -8,21 +8,21 @@ using UnityEngine;
 
 public class StarsBackground : MonoBehaviour
 {
-    SpriteRenderer mr;
-
+    SpriteRenderer rend;
     Material mat;
 
     public float speedDenominator;
 
     private void Start()
     {
-        mr = GetComponent<SpriteRenderer>();
-        mat = mr.material;
+        rend = GetComponent<SpriteRenderer>();
+        mat = rend.material;
 
         mat.mainTexture.wrapMode = TextureWrapMode.Repeat;
     }
 
-    // Update is called once per frame
+    // Credits: quill18creates (youtube)
+    // Purpose: updates the stars' offset to give appearance of movement.
     void Update()
     {
         Vector2 offset = mat.mainTextureOffset;
