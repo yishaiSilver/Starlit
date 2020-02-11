@@ -15,7 +15,7 @@ public class Bullet : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        rb2d.velocity = transform.right * speed;
+        rb2d.velocity = transform.up * speed;
         originalPosition = transform.position;
         modifier = Random.Range(0.93f, 1.07f);
         range *= modifier;

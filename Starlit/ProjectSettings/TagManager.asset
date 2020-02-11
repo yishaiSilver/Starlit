@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Landable
   - Star
+  - Canvas
+  - Weapon
   layers:
   - Default
   - TransparentFX
@@ -48,4 +50,7 @@ TagManager:
     locked: 0
   - name: Ship
     uniqueID: 1145266713
+    locked: 0
+  - name: Weapon
+    uniqueID: 1079040371
     locked: 0
