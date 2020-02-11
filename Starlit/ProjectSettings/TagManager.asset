@@ -8,6 +8,9 @@ TagManager:
   - Star
   - Canvas
   - Weapon
+  - HUD-World
+  - HUD
+  - HUD-Target
   layers:
   - Default
   - TransparentFX
@@ -17,7 +20,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - MinimapIcons
   - 
   - 
   - 

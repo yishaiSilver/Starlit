@@ -11,17 +11,14 @@ public class Turret : MonoBehaviour {
     public float speed;
     public Transform globalTarget;
 
-    public AudioClip impact;
-    public float volume = 0.7f;
-    public AudioSource source;
-
     public Transform firePoint1;
     public Transform firePoint2;
     public GameObject bulletPrefab;
 
     public float fireRate;
+    public float accuracy;
     private float nextFire = 0.0f;
-    public float lampTime;
+    //public float lampTime;
 
     private int shootCount;
 
@@ -95,6 +92,7 @@ public class Turret : MonoBehaviour {
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, speed * Time.deltaTime);
     }
 
+    // NOTE: Should try adding spread on gun.
     public void shoot()
     {
         if (Time.time > nextFire && !MouseInformation.onObject && ship.isFullscale())
