@@ -618,7 +618,7 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 9681c7f9-77d1-4e2d-b7de-4556335754c3
   projectName: Starlit
   organizationId: yishaisilver8

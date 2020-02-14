@@ -55,9 +55,9 @@ public class PlayerController : MonoBehaviour {
 
     public void SetTarget(GameObject target)
     {
-        //GameObject targetBox = canvas.transform.Find("HUD").Find("Target").gameObject;
-        //Text text = targetBox.GetComponent<Text>();
-        //text.text = target.name.ToUpper();
+        GameObject targetBox = canvas.transform.Find("HUD").Find("Target").gameObject;
+        Text text = targetBox.GetComponent<Text>();
+        text.text = target.name.ToUpper();
     }
 
     public void SetTarget(string str)

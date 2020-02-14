@@ -2887,7 +2887,7 @@ GameObject:
   - component: {fileID: 919477446}
   - component: {fileID: 919477445}
   m_Layer: 0
-  m_Name: Moon_Finished
+  m_Name: Luna
   m_TagString: Landable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
