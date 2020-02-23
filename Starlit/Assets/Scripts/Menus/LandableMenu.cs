@@ -21,9 +21,9 @@ public class LandableMenu : MonoBehaviour {
 
     public void Start()
     {
-        title = transform.Find("Panel").Find("PanelName").Find("Text").GetComponent<Text>();
-        panelCargo = transform.Find("Panel").Find("PanelCargo").Find("Text").GetComponent<Text>();
-        panelPlanetResources = transform.Find("Panel").Find("PanelPlanetResources").Find("Text").GetComponent<Text>();
+        title = transform.Find("Trading").Find("PlanetName").Find("Text").GetComponent<Text>();
+        panelCargo = transform.Find("Trading").Find("PanelCargo").Find("Text").GetComponent<Text>();
+        panelPlanetResources = transform.Find("Trading").Find("PanelPlanetResources").Find("Text").GetComponent<Text>();
     }
 
     public void BuyItem()
