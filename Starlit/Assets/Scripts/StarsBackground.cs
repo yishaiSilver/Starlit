@@ -8,17 +8,17 @@ using UnityEngine;
 
 public class StarsBackground : MonoBehaviour
 {
-    SpriteRenderer rend;
+    Renderer rend;
     Material mat;
 
     public float speedDenominator;
 
     private void Start()
     {
-        rend = GetComponent<SpriteRenderer>();
+        rend = GetComponent<Renderer>();
         mat = rend.material;
 
-        mat.mainTexture.wrapMode = TextureWrapMode.Repeat;
+        //mat.mainTexture.wrapMode = TextureWrapMode.Repeat;
     }
 
     // Credits: quill18creates (youtube)
@@ -31,6 +31,5 @@ public class StarsBackground : MonoBehaviour
         offset.y = transform.position.y / (transform.localScale.y * speedDenominator);
 
         mat.mainTextureOffset = offset;
-
     }
 }

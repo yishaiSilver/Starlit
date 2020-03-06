@@ -59,7 +59,7 @@ public class Ship : MonoBehaviour
         shipSize = transform.localScale;
 
         rb2d = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        animator = transform.Find("Sprite").GetComponent<Animator>();
         ShipInformation.jumpped = true;
 
         //script = GetComponent<ShipScript>();

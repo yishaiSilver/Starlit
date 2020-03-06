@@ -11,6 +11,7 @@ TagManager:
   - HUD-World
   - HUD
   - HUD-Target
+  - Ship
   layers:
   - Default
   - TransparentFX
@@ -47,6 +48,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: StarsTiny
+    uniqueID: 2325144205
+    locked: 0
+  - name: StarsSmall
+    uniqueID: 2263634077
     locked: 0
   - name: Planets
     uniqueID: 136994365
