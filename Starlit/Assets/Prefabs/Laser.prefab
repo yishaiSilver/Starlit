@@ -118,8 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfea291733ad4274898153510bd021e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7
-  range: 6
+  speed: 10
+  range: 8
   rb2d: {fileID: 50575918968128588}
   damage: 40
   impactEffect: {fileID: 0}
@@ -156,7 +156,7 @@ LineRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1079040371
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 10
   m_Positions:
   - {x: 0, y: 0, z: 0}

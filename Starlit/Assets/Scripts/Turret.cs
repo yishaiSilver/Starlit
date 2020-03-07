@@ -52,7 +52,7 @@ public class Turret : MonoBehaviour
         //    command = "Mouse2";
         else if (Input.GetKey(KeyCode.E))
             command = "auto";
-        else if (Input.GetKey(KeyCode.R) || Time.time - nextFire > lampTime)
+        else if (Input.GetKey(KeyCode.R))
             command = "StandBy";
 
         if (command == "Mouse0")
@@ -64,7 +64,7 @@ public class Turret : MonoBehaviour
             if (true)
             {
                 LockOn1(globalTarget.gameObject);
-                Vector3 leadedPosition = LockOn3(globalTarget.gameObject);
+                Vector3 leadedPosition = LockOn1(globalTarget.gameObject);
                 if (leadedPosition != new Vector3(0, 0, 0))
                 {
                     LookAt(leadedPosition);
@@ -112,7 +112,11 @@ public class Turret : MonoBehaviour
         float timeToContact = displacement.magnitude / (bulletPrefab.GetComponent<Bullet>().speed - radialVelocity);
 
         Vector3 expectedPosition = target.transform.position + (targetVelocity * timeToContact);
-        targetLeaded1.transform.position = expectedPosition;
+
+        if (targetLeaded1 != null)
+        {
+            targetLeaded1.transform.position = expectedPosition;
+        }
 
         return expectedPosition;
     }
@@ -153,13 +157,15 @@ public class Turret : MonoBehaviour
                 timeToContact = Mathf.Min(timeToContact1, timeToContact2);
 
             timeToContact = Mathf.Max(timeToContact, 0);
-
-            Debug.Log(timeToContact);
+            
             Vector3 expectedPosition = target.transform.position // displacement
                 + (targetVelocity * timeToContact);          // vi * t 
                                                              //+ (targetVelocity / targetVelocity.magnitude) * 0.5f * targetAcceleration * Mathf.Pow(timeToContact, 2); // 1/2 a t ^2
 
-            targetLeaded1.transform.position = expectedPosition;
+            if (targetLeaded1 != null)
+            {
+                targetLeaded1.transform.position = expectedPosition;
+            }
 
             if ((expectedPosition - transform.position).magnitude <= bulletPrefab.GetComponent<Bullet>().range)
             {
@@ -198,7 +204,10 @@ public class Turret : MonoBehaviour
                 + (targetVelocity * timeToContact);          // vi * t 
                                                              //+ (targetVelocity / targetVelocity.magnitude) * 0.5f * targetAcceleration * Mathf.Pow(timeToContact, 2); // 1/2 a t ^2
 
-            targetLeaded3.transform.position = expectedPosition;
+            if (targetLeaded3 != null)
+            {
+                targetLeaded3.transform.position = expectedPosition;
+            }
 
             if ((expectedPosition - transform.position).magnitude <= bulletPrefab.GetComponent<Bullet>().range)
             {
