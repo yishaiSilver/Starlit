@@ -6,6 +6,7 @@ public class Ship : MonoBehaviour
 {
     private HUDManager hudManager;
     public PlayerController playerController;
+    public StarSystemManager starSystemManager;
 
     //-----Ship Characteristics
     public bool isPlayer;
@@ -202,6 +203,11 @@ public class Ship : MonoBehaviour
             ret = true;
         }
 
+        if (Input.GetKey(KeyCode.J))
+        {
+            JumpToStarSystem();
+        }
+
         Thrust();
         return ret;
     }
@@ -258,11 +264,6 @@ public class Ship : MonoBehaviour
             return true;
         else
             return false;
-    }
-
-    public bool ThrustToTarget()
-    {
-        return false;
     }
 
     public GameObject FindClosestLandableObject()
@@ -504,5 +505,14 @@ public class Ship : MonoBehaviour
         }
 
         starSystem = closestStar.GetComponent<StarSystem>();
+    }
+
+    public void JumpToStarSystem()
+    {
+        if(playerController != null)
+        {
+            playerController.JumpToSystem();
+        }
+        starSystemManager.TransferSystems(this.gameObject);
     }
 }

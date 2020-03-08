@@ -246,9 +246,15 @@ public class Turret : MonoBehaviour
             if (!MouseInformation.onObject)
             {
                 if (shootCount % 2 == 0)
-                    Instantiate(bulletPrefab, firePoint1.position, firePoint1.rotation);
+                {
+                    GameObject laser = Instantiate(bulletPrefab, firePoint1.position, firePoint1.rotation);
+                    laser.layer = gameObject.layer;
+                }
                 else
-                    Instantiate(bulletPrefab, firePoint2.position, firePoint2.rotation);
+                {
+                    GameObject laser = Instantiate(bulletPrefab, firePoint2.position, firePoint2.rotation);
+                    laser.layer = gameObject.layer;
+                }
                 shootCount++;
             }
             nextFire = Time.time + fireRate;
