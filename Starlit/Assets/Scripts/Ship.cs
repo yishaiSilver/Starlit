@@ -6,6 +6,7 @@ public class Ship : MonoBehaviour
 {
     private HUDManager hudManager;
     public PlayerController playerController;
+    public StarSystemManager starSystemManager;
 
     //-----Ship Characteristics
     public bool isPlayer;
@@ -54,12 +55,18 @@ public class Ship : MonoBehaviour
     //private ShipScript script;
     //---------------------------
 
+    public float jumpDistance;
+    public float jumpAcceleraltion;
+
+    public GameObject sprite;
+
     void Start()
     {
         shipSize = transform.localScale;
 
         rb2d = GetComponent<Rigidbody2D>();
-        animator = transform.Find("Sprite").GetComponent<Animator>();
+     
+        animator = sprite.GetComponent<Animator>();
         ShipInformation.jumpped = true;
 
         //script = GetComponent<ShipScript>();
@@ -202,6 +209,11 @@ public class Ship : MonoBehaviour
             ret = true;
         }
 
+        if (Input.GetKey(KeyCode.J))
+        {
+            JumpToStarSystem();
+        }
+
         Thrust();
         return ret;
     }
@@ -258,11 +270,6 @@ public class Ship : MonoBehaviour
             return true;
         else
             return false;
-    }
-
-    public bool ThrustToTarget()
-    {
-        return false;
     }
 
     public GameObject FindClosestLandableObject()
@@ -490,19 +497,32 @@ public class Ship : MonoBehaviour
     {
         GameObject[] stars = GameObject.FindGameObjectsWithTag("Star");
 
-        GameObject closestStar = stars[0];
-        float closestStarDistance = (transform.position - closestStar.transform.position).magnitude;
-
         foreach(GameObject star in stars)
         {
-            float starDistance = (transform.position - star.transform.position).magnitude;
-            if (starDistance < closestStarDistance)
+            if(star.layer == gameObject.layer)
             {
-                closestStar = star;
-                closestStarDistance = starDistance;
+                starSystem = star.GetComponent<StarSystem>();
             }
         }
+    }
 
-        starSystem = closestStar.GetComponent<StarSystem>();
+    public void JumpToStarSystem()
+    {
+        if(playerController != null)
+        {
+            playerController.JumpToSystem();
+        }
+        starSystemManager.TransferSystems(this.gameObject);
+    }
+
+    public void enableSprite()
+    {
+        //Debug.Log(gameObject.name);
+        sprite.SetActive(true);
+    }
+
+    public void disableSprite()
+    {
+        sprite.SetActive(false);
     }
 }

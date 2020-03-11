@@ -6,8 +6,12 @@ public class PlayerController : MonoBehaviour {
 
     public Ship personalShip;
 
+    public StarSystemManager starSystemManager;
+
     private GameObject canvas;
     private HUDManager hudManager;
+
+    public Camera cam;
 
     private bool controlsEnabled = true;
 
@@ -16,6 +20,12 @@ public class PlayerController : MonoBehaviour {
         personalShip.setPlayerController(this);
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         hudManager = canvas.GetComponent<HUDManager>();
+    }
+
+    public void JumpToSystem()
+    {
+        int layer = LayerMask.NameToLayer("Proxima");
+        cam.cullingMask = (1 << layer) | (1 << 0);
     }
 
     public void FixedUpdate()
@@ -37,10 +47,6 @@ public class PlayerController : MonoBehaviour {
         {
             personalShip.MoveTowards();
         }
-    }
-
-    public void LateUpdate()
-    {
     }
 
     public void notifyOfTakeoff()
