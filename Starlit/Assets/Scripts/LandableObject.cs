@@ -8,7 +8,8 @@ public class LandableObject : MonoBehaviour
     public float resources;
     public float productionRate;
     public float price;
-    
+    public GameObject sprite;
+
     private void Update()
     {
         resources += productionRate * Time.deltaTime;
@@ -24,5 +25,15 @@ public class LandableObject : MonoBehaviour
     {
         resources += amount;
         return amount * price;
+    }
+
+    public void enableSprite()
+    {
+        sprite.SetActive(true);
+    }
+
+    public void disableSprite()
+    {
+        sprite.SetActive(false);
     }
 }

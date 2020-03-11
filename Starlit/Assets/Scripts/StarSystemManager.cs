@@ -6,9 +6,16 @@ public class StarSystemManager : MonoBehaviour {
 
 	public StarSystemList systemList;
 
-	public void TransferSystems(GameObject jumpingObject)
+    public void TransferSystems(GameObject jumper, StarSystem from, StarSystem to)
     {
-        SetLayerOfObject(jumpingObject.transform, LayerMask.NameToLayer("Proxima"));
+        from.removeShip(jumper);
+        to.addShip(jumper);
+        SetLayerOfObject(jumper.transform, LayerMask.NameToLayer("Proxima"));
+    }
+
+    public void TransferSystems(GameObject jumper)
+    {
+        SetLayerOfObject(jumper.transform, LayerMask.NameToLayer("Proxima"));
     }
 
     public void SetLayerOfObject(Transform obj, int layer)

@@ -9,7 +9,8 @@ public class HUDManager : MonoBehaviour {
     public GameObject hud;
     public GameObject worldMenu;
     public GameObject codeMenu;
-
+    public GameObject map;
+   
     private void Start()
     {
         worldMenu.GetComponent<LandableMenu>().Start();
@@ -46,5 +47,6 @@ public class HUDManager : MonoBehaviour {
         hud.SetActive(false);
         worldMenu.SetActive(false);
         codeMenu.SetActive(false);
+        //map.SetActive(false);
     }
 }

@@ -8,8 +8,10 @@ using UnityEngine;
 
 public class StarsBackground : MonoBehaviour
 {
-    Renderer rend;
-    Material mat;
+    private Renderer rend;
+    private Material mat;
+
+    private Vector2 offsetPreserved;
 
     public float speedDenominator;
 
@@ -31,5 +33,15 @@ public class StarsBackground : MonoBehaviour
         offset.y = transform.position.y / (transform.localScale.y * speedDenominator);
 
         mat.mainTextureOffset = offset;
+    }
+
+    public void preserveOffset()
+    {
+        offsetPreserved = mat.mainTextureOffset;
+    }
+
+    public void loadOffset()
+    {
+        mat.mainTextureOffset = offsetPreserved;
     }
 }
