@@ -11,6 +11,9 @@ public class StarSystem : MonoBehaviour {
     private ArrayList shipList = new ArrayList();
     public GameObject StarSprite;
 
+    private int starSystemIndex;
+    public StarSystemList neighboringStars;
+
     void Start()
     {
         layerInt = LayerMask.NameToLayer(layerName);
@@ -138,5 +141,20 @@ public class StarSystem : MonoBehaviour {
     public void hideStar()
     {
         StarSprite.SetActive(false);
+    }
+
+    public void setStarSystemIndex(int n)
+    {
+        starSystemIndex = n;
+    }
+
+    public int getStarSystemIndex()
+    {
+        return starSystemIndex;
+    }
+
+    public StarSystem[] getNeighboringStars()
+    {
+        return neighboringStars.systems;
     }
 }

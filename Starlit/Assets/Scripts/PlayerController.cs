@@ -22,10 +22,9 @@ public class PlayerController : MonoBehaviour {
         hudManager = canvas.GetComponent<HUDManager>();
     }
 
-    public void JumpToSystem()
+    public void JumpToSystem(int layerInt)
     {
-        int layer = LayerMask.NameToLayer("Proxima");
-        cam.cullingMask = (1 << layer) | (1 << 0);
+        cam.cullingMask = (1 << layerInt) | (1 << 0);
     }
 
     public void FixedUpdate()

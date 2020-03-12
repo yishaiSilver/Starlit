@@ -63,8 +63,9 @@ public class Turret : MonoBehaviour
         {
             if (true)
             {
+                Debug.Log("Lockon" + globalTarget.gameObject.name);
                 LockOn1(globalTarget.gameObject);
-                Vector3 leadedPosition = LockOn1(globalTarget.gameObject);
+                Vector3 leadedPosition = LockOn3(globalTarget.gameObject);
                 if (leadedPosition != new Vector3(0, 0, 0))
                 {
                     LookAt(leadedPosition);
@@ -189,7 +190,7 @@ public class Turret : MonoBehaviour
         float targetVelocityAngle = Mathf.Atan2(targetVelocity.y, targetVelocity.x);
         float deltaAngle = Mathf.DeltaAngle(angle, targetVelocityAngle * Mathf.Rad2Deg);
         float theta = 90 - deltaAngle;
-        float radialSpeed = Mathf.Sin(theta * Mathf.Deg2Rad) * targetVelocity.magnitude;
+        float radialSpeed = Mathf.Tan(theta * Mathf.Deg2Rad) * targetVelocity.magnitude;
 
         float targetRadialAcceleration = (radialSpeed - initRadialSpeed) / Time.deltaTime;
 
@@ -209,10 +210,12 @@ public class Turret : MonoBehaviour
                 targetLeaded3.transform.position = expectedPosition;
             }
 
+
+            initRadialSpeed = radialSpeed;
+            return expectedPosition;
+
             if ((expectedPosition - transform.position).magnitude <= bulletPrefab.GetComponent<Bullet>().range)
             {
-                initRadialSpeed = radialSpeed;
-                return expectedPosition;
             }
         }
         initRadialSpeed = radialSpeed;

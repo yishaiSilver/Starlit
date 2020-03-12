@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class Ship : MonoBehaviour
@@ -60,6 +62,11 @@ public class Ship : MonoBehaviour
 
     public GameObject sprite;
 
+    private Map map;
+
+    public StarSystem targetStar; // need to get rid of; integrate with actual map system
+    private Stack<StarSystem> currentDirections;
+
     void Start()
     {
         shipSize = transform.localScale;
@@ -76,6 +83,8 @@ public class Ship : MonoBehaviour
         currentCargo = 0;
 
         alignSpeed = 1f;
+
+        map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
     }
 
     private void FixedUpdate()
@@ -118,12 +127,16 @@ public class Ship : MonoBehaviour
             Vector2 direction = new Vector2(Mathf.Cos((rotation) * Mathf.Deg2Rad), Mathf.Sin((rotation) * Mathf.Deg2Rad));
             rb2d.AddForce(direction * thrust);
             rb2d.velocity = Vector2.ClampMagnitude(rb2d.velocity, maxSpeed);
-            animator.SetBool("Firing", true);
+            
+            if(sprite.activeSelf)
+                animator.SetBool("Firing", true);
+            
             thrusting = false;
         }
         else
         {
-            animator.SetBool("Firing", false);
+            if(sprite.activeSelf)
+                animator.SetBool("Firing", false);
         }
     }
 
@@ -209,9 +222,16 @@ public class Ship : MonoBehaviour
             ret = true;
         }
 
-        if (Input.GetKey(KeyCode.J))
+        if (Input.GetKey(KeyCode.K))
         {
-            JumpToStarSystem();
+            currentDirections = map.getStackTo(starSystem, targetStar);
+        }
+
+        if (Input.GetKey(KeyCode.J) && currentDirections.Count != 0)
+        {
+            //starSystemManager.TransferSystems(starSystem, currentDirections.Peek(), gameObject);
+            JumpToStarSystem(currentDirections.Peek());
+            starSystem = currentDirections.Pop();
         }
 
         Thrust();
@@ -506,13 +526,14 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void JumpToStarSystem()
+    public void JumpToStarSystem(StarSystem to)
     {
+        Debug.Log("Jumping to " + to.name);
         if(playerController != null)
         {
-            playerController.JumpToSystem();
+            playerController.JumpToSystem(to.getLayerInt());
         }
-        starSystemManager.TransferSystems(this.gameObject);
+        starSystemManager.TransferSystems(starSystem, to, gameObject);
     }
 
     public void enableSprite()
