@@ -319,7 +319,7 @@ public class Ship : MonoBehaviour
     {
         transform.position = Vector2.MoveTowards(transform.position, target.position, alignSpeed * Time.deltaTime);
 
-        if (transform.position == target.position)
+        if (transform.position.x == target.position.x && transform.position.y == target.position.y)
             return true;
         else
             return false;

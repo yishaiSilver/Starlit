@@ -122,7 +122,8 @@ MonoBehaviour:
   range: 8
   rb2d: {fileID: 50575918968128588}
   damage: 40
-  impactEffect: {fileID: 0}
+  impactEffect: {fileID: 1443699801395094, guid: 9507541eca87ec64b920567674a3590c,
+    type: 2}
 --- !u!120 &120929203679725658
 LineRenderer:
   m_ObjectHideFlags: 1

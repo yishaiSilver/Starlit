@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
 
     public GameObject player;
+    public Camera minimapCamera;
 
     private Vector3 offset;
     
@@ -25,5 +26,11 @@ public class CameraController : MonoBehaviour {
     {
         transform.rotation = Quaternion.LerpUnclamped(transform.rotation, angle, time * Time.time);
         return (Quaternion.Angle(transform.rotation, angle)) < 1f;
+    }
+
+    public void setCameraLayer(int layer)
+    {
+        GetComponent<Camera>().cullingMask = (1 << layer) | (1 << 0);
+        minimapCamera.cullingMask = (1 << layer) | (1 << 0);
     }
 }

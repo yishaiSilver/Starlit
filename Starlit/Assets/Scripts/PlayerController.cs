@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour {
     private GameObject canvas;
     private HUDManager hudManager;
 
-    public Camera cam;
+    public CameraController cam;
 
     private bool controlsEnabled = true;
 
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour {
 
     public void JumpToSystem(int layerInt)
     {
-        cam.cullingMask = (1 << layerInt) | (1 << 0);
+        cam.setCameraLayer(layerInt);
     }
 
     public void FixedUpdate()
