@@ -546,4 +546,9 @@ public class Ship : MonoBehaviour
     {
         sprite.SetActive(false);
     }
+
+    public Vector2 getVelocity()
+    {
+        return rb2d.velocity;
+    }
 }

@@ -15,6 +15,7 @@ TagManager:
   - Sprite
   - Map
   - StarSystemManager
+  - MapNode
   layers:
   - Default
   - TransparentFX
@@ -66,4 +67,7 @@ TagManager:
     locked: 0
   - name: Weapon
     uniqueID: 1079040371
+    locked: 0
+  - name: UI
+    uniqueID: 1525164383
     locked: 0

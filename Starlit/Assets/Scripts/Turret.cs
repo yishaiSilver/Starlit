@@ -251,11 +251,13 @@ public class Turret : MonoBehaviour
                 if (shootCount % 2 == 0)
                 {
                     GameObject laser = Instantiate(bulletPrefab, firePoint1.position, firePoint1.rotation);
+                    laser.GetComponent<Bullet>().addVelocity(ship.getVelocity());
                     laser.layer = gameObject.layer;
                 }
                 else
                 {
                     GameObject laser = Instantiate(bulletPrefab, firePoint2.position, firePoint2.rotation);
+                    laser.GetComponent<Bullet>().addVelocity(ship.getVelocity());
                     laser.layer = gameObject.layer;
                 }
                 shootCount++;

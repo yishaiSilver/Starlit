@@ -13,9 +13,12 @@ public class StarSystem : MonoBehaviour {
 
     private int starSystemIndex;
     public StarSystemList neighboringStars;
+    private StarSystem[] neighboringStarsArr;
+    //private StarSystemLink[] starLinks;
 
     void Start()
     {
+        neighboringStarsArr = neighboringStars.systems;
         layerInt = LayerMask.NameToLayer(layerName);
 
         GameObject[] objs = GameObject.FindGameObjectsWithTag("Ship");
@@ -155,6 +158,6 @@ public class StarSystem : MonoBehaviour {
 
     public StarSystem[] getNeighboringStars()
     {
-        return neighboringStars.systems;
+        return neighboringStarsArr;
     }
 }

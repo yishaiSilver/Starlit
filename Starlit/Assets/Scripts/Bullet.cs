@@ -31,14 +31,16 @@ public class Bullet : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D hitInfo)
     {
-
-
-        if (hitInfo.name.Length > 7 && hitInfo.name.Substring(0, 8).Equals("XFighter"))
+        if (hitInfo.gameObject.tag == "Ship")
         {
             ShipInformation.hitAsteroid = true;
             Destroy(gameObject);
             Instantiate(impactEffect, transform.position, transform.rotation);
-            Debug.Log("------");
         }
+    }
+
+    public void addVelocity(Vector2 v)
+    {
+        rb2d.velocity += v;
     }
 }
