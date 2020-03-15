@@ -7,7 +7,6 @@ public class Map : MonoBehaviour {
 	private MapNode[] allNodes;
 	[SerializeField] private Color defaultColor;
 	[SerializeField] private Color activeColor;
-	public GameObject mapLine;
 
 	// Use this for initialization
 	void Start()
@@ -18,13 +17,15 @@ public class Map : MonoBehaviour {
 		{
 			allNodes[i] = starObjects[i].GetComponent<MapNode>();
 			allNodes[i].setNodeIndex(i);
-			Debug.Log(i + ": " + allNodes[i]);
+			allNodes[i].initializeLinks();
+			Debug.Log(i + ": " + allNodes[i].name);
 		}
 
 		drawAllLinks();
+		getStackTo(allNodes[6], allNodes[3]);
 	}
 
-	public Stack<StarSystem> getStackTo(StarSystem from, StarSystem to)
+	/*public Stack<StarSystem> getStackTo(StarSystem from, StarSystem to)
 	{
 		int[] bfsReturn = BFSShortestReach(from);
 		return retraceBFSPath(from, to, bfsReturn);
@@ -77,7 +78,7 @@ public class Map : MonoBehaviour {
 		}
 
 		return directions;
-	}
+	} */
 
 	public void drawAllLinks()
 	{
@@ -98,7 +99,7 @@ public class Map : MonoBehaviour {
 			{
 				if (links[i] == null)
 				{
-					MapLink link = currentNode.makeNewMapLink(mapLine, i, defaultColor);
+					MapLink link = currentNode.makeNewMapLink(i, defaultColor, activeColor);
 					neighbors[i].setNewMapLink(currentNode, link);
 					if (!haveVisited[neighbors[i].getNodeIndex()])
 					{
@@ -112,6 +113,8 @@ public class Map : MonoBehaviour {
 
 	public Stack<MapNode> getStackTo(MapNode from, MapNode to)
     {
+		Debug.Log("Getting path from " + from.name + " to " + to.name + ".\n");
+
 		int[] bfsReturn = BFSShortestReach(from);
 		return retraceBFSPath(from, to, bfsReturn);
     }
@@ -143,9 +146,6 @@ public class Map : MonoBehaviour {
 			}
 		}
 
-		Debug.Log(previousSystem[0] + ", " + previousSystem[1] + ", " + previousSystem[2]);
-		
-
 		return previousSystem;
 	}
 
@@ -156,8 +156,9 @@ public class Map : MonoBehaviour {
 		
 		for (int at = to.getNodeIndex(); at != BFSOutput[at]; at = BFSOutput[at])
 		{
-			Debug.Log("Pushing: " + allNodes[at]);
+			Debug.Log(allNodes[at] + " -> " + allNodes[BFSOutput[at]]);
 			directions.Push(allNodes[at]);
+			allNodes[at].setLinkActive(allNodes[BFSOutput[at]]);
 		}
 
 		if(directions.Peek() == from)

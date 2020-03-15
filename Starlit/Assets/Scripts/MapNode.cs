@@ -13,7 +13,6 @@ public class MapNode : MonoBehaviour {
 	void Start()
 	{
 		map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
-		links = new MapLink[neighbors.Length];
 	}
 
 	public MapNode[] getNeighbors()
@@ -24,6 +23,14 @@ public class MapNode : MonoBehaviour {
 	public MapLink[] getLinks()
 	{
 		return links;
+	}
+
+	public void initializeLinks()
+	{
+		if (links == null)
+		{
+			links = new MapLink[neighbors.Length];
+		}
 	}
 
 	public StarSystem getStar()
@@ -41,10 +48,10 @@ public class MapNode : MonoBehaviour {
 		return index;
 	}
 
-	public MapLink makeNewMapLink(GameObject mapLine, int n, Color color)
+	public MapLink makeNewMapLink(int n, Color defaultColor, Color activeColor)
 	{
 		links[n] = gameObject.AddComponent<MapLink>();
-		links[n].newMapLink(gameObject, gameObject, neighbors[n].gameObject, color);
+		links[n].newMapLink(gameObject, gameObject, neighbors[n].gameObject, defaultColor, activeColor);
 		return links[n];
 	}
 
@@ -55,6 +62,18 @@ public class MapNode : MonoBehaviour {
 			if (neighbors[i] == from)
 			{
 				links[i] = link;
+				break;
+			}
+		}
+	}
+
+	public void setLinkActive(MapNode to)
+	{
+		for (int i = 0; i < neighbors.Length; i++)
+		{
+			if (neighbors[i] == to)
+			{
+				links[i].setActiveColor();
 				break;
 			}
 		}

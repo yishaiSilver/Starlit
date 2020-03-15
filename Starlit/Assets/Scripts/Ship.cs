@@ -224,7 +224,7 @@ public class Ship : MonoBehaviour
 
         if (Input.GetKey(KeyCode.K))
         {
-            currentDirections = map.getStackTo(starSystem, targetStar);
+            //currentDirections = map.getStackTo(starSystem, targetStar);
         }
 
         if (Input.GetKey(KeyCode.J) && currentDirections.Count != 0)
