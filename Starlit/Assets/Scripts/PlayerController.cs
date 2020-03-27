@@ -81,4 +81,9 @@ public class PlayerController : MonoBehaviour {
     {
         controlsEnabled = true;
     }
+
+    public void toggleMap()
+    {
+        hudManager.toggleMap();
+    }
 }

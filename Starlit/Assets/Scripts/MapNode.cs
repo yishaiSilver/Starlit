@@ -10,9 +10,9 @@ public class MapNode : MonoBehaviour {
 	private int index;
 	private MapLink[] links;
 
-	void Start()
+	public void setMap(Map map)
 	{
-		map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
+		this.map = map;
 	}
 
 	public MapNode[] getNeighbors()
@@ -77,5 +77,22 @@ public class MapNode : MonoBehaviour {
 				break;
 			}
 		}
+	}
+
+	public void setLinkDefault(MapNode to)
+	{
+		for (int i = 0; i < neighbors.Length; i++)
+		{
+			if (neighbors[i] == to)
+			{
+				links[i].setDefaultColor();
+				break;
+			}
+		}
+	}
+
+	public void onButtonPress()
+	{
+		map.getStackTo(this);
 	}
 }

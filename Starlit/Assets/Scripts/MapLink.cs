@@ -39,6 +39,31 @@ public class MapLink : MonoBehaviour {
 		line.SetPosition(1, new Vector3(end.transform.position.x, end.transform.position.y, z));
 	}
 
+	/*public void newMapLink(GameObject parentNode, GameObject start, GameObject end, Color defaultColor, Color activeColor)
+	{
+		this.start = start;
+		this.end = end;
+		this.defaultColor = defaultColor;
+		this.activeColor = activeColor;
+
+		lineObject = new GameObject();
+		lineObject.transform.SetParent(parentNode.transform);
+
+		line = lineObject.AddComponent<UILineRenderer>();
+		//line.startWidth = width;
+		//line.endWidth = width;
+		line.material = new Material(Shader.Find("Particles/Additive"));
+
+		//line.startColor = defaultColor;
+		//line.endColor = defaultColor;
+
+		//line.sortingLayerName = "UI";
+		//line.positionCount = 2;
+
+		line.Points[0] = new Vector2(start.transform.position.x, start.transform.position.y);
+		line.Points[1] = new Vector2(end.transform.position.x, end.transform.position.y);
+	}*/
+
 	void LateUpdate()
 	{
 		line.SetPosition(0, new Vector3(start.transform.position.x, start.transform.position.y, z));

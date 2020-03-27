@@ -84,7 +84,7 @@ public class Ship : MonoBehaviour
 
         alignSpeed = 1f;
 
-        map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
+        //map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
     }
 
     private void FixedUpdate()
@@ -178,13 +178,6 @@ public class Ship : MonoBehaviour
             ret = true;
         }
 
-        // Move towards (REMOVE)
-        if (Input.GetKey(KeyCode.M))
-        {
-            Debug.Log(MoveTowards(FindClosestLandableObject().transform));
-            ret = true;
-        }
-
         // Turn right
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
@@ -232,6 +225,11 @@ public class Ship : MonoBehaviour
             //starSystemManager.TransferSystems(starSystem, currentDirections.Peek(), gameObject);
             JumpToStarSystem(currentDirections.Peek());
             starSystem = currentDirections.Pop();
+        }
+
+        if (Input.GetKey(KeyCode.M))
+        {
+            playerController.toggleMap();
         }
 
         Thrust();
@@ -550,5 +548,10 @@ public class Ship : MonoBehaviour
     public Vector2 getVelocity()
     {
         return rb2d.velocity;
+    }
+
+    public void setJumpPath(Stack<StarSystem> directions)
+    {
+        currentDirections = directions;
     }
 }

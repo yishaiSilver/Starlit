@@ -8,9 +8,15 @@ public class Map : MonoBehaviour {
 	[SerializeField] private Color defaultColor;
 	[SerializeField] private Color activeColor;
 
+	private Ship defaultShip;
+
+	public GameObject mapPanel;
+
 	// Use this for initialization
 	void Start()
 	{
+		mapPanel.SetActive(true);
+
 		GameObject[] starObjects = GameObject.FindGameObjectsWithTag("MapNode");
 		allNodes = new MapNode[starObjects.Length];
 		for (int i = 0; i < starObjects.Length; i++)
@@ -18,67 +24,20 @@ public class Map : MonoBehaviour {
 			allNodes[i] = starObjects[i].GetComponent<MapNode>();
 			allNodes[i].setNodeIndex(i);
 			allNodes[i].initializeLinks();
+			allNodes[i].setMap(this);
 			Debug.Log(i + ": " + allNodes[i].name);
 		}
 
 		drawAllLinks();
-		getStackTo(allNodes[6], allNodes[3]);
+
+		mapPanel.SetActive(false);
+		//getStackTo(allNodes[14], allNodes[0]);
 	}
 
-	/*public Stack<StarSystem> getStackTo(StarSystem from, StarSystem to)
+	public void setDefaultShip(Ship ship)
 	{
-		int[] bfsReturn = BFSShortestReach(from);
-		return retraceBFSPath(from, to, bfsReturn);
+		defaultShip = ship;
 	}
-
-	public int[] BFSShortestReach(StarSystem from)
-	{
-		Queue<StarSystem> q = new Queue<StarSystem>();
-		q.Enqueue(from);
-
-		int[] previousSystem = new int[allNodes.Length];
-		bool[] haveVisited = new bool[allNodes.Length];
-
-		haveVisited[from.getStarSystemIndex()] = true;
-		previousSystem[from.getStarSystemIndex()] = from.getStarSystemIndex();
-
-		while (q.Count != 0)
-		{
-			StarSystem currentNode = q.Dequeue();
-			StarSystem[] neighbors = currentNode.getNeighboringStars();
-
-			for (int i = 0; i < neighbors.Length; i++)
-			{
-				if (!haveVisited[neighbors[i].getStarSystemIndex()]) // issue
-				{
-					previousSystem[neighbors[i].getStarSystemIndex()] = currentNode.getStarSystemIndex();
-					haveVisited[neighbors[i].getStarSystemIndex()] = true;
-					q.Enqueue(neighbors[i]);
-				}
-			}
-		}
-
-		return previousSystem;
-	}
-
-	public Stack<StarSystem> retraceBFSPath(StarSystem from, StarSystem to, int[] BFSOutput)
-	{
-		Stack<StarSystem> directions = new Stack<StarSystem>();
-
-
-		for (int at = to.getStarSystemIndex(); at != BFSOutput[at]; at = BFSOutput[at])
-		{
-			Debug.Log("Pushing: " + allNodes[at]);
-			directions.Push(allNodes[at].getStar());
-		}
-
-		if (directions.Peek() == from)
-		{
-			return null;
-		}
-
-		return directions;
-	} */
 
 	public void drawAllLinks()
 	{
@@ -111,9 +70,19 @@ public class Map : MonoBehaviour {
 		}
 	}
 
+	public void getStackTo(MapNode target)
+	{
+		getStackTo(allNodes[0], target);
+	}
+
 	public Stack<MapNode> getStackTo(MapNode from, MapNode to)
     {
-		Debug.Log("Getting path from " + from.name + " to " + to.name + ".\n");
+		//Debug.Log("Getting path from " + from.name + " to " + to.name + ".\n");
+
+		if(from == to)
+		{
+			return null;
+		}
 
 		int[] bfsReturn = BFSShortestReach(from);
 		return retraceBFSPath(from, to, bfsReturn);
@@ -141,6 +110,7 @@ public class Map : MonoBehaviour {
 				{
 					previousSystem[neighbors[i].getNodeIndex()] = currentNode.getNodeIndex();
 					haveVisited[neighbors[i].getNodeIndex()] = true;
+					currentNode.setLinkDefault(neighbors[i]);
 					q.Enqueue(neighbors[i]);
 				}
 			}

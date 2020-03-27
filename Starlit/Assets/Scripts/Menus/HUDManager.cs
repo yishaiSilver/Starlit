@@ -10,7 +10,8 @@ public class HUDManager : MonoBehaviour {
     public GameObject worldMenu;
     public GameObject codeMenu;
     public GameObject map;
-   
+    private bool mapOpen = false;
+
     private void Start()
     {
         worldMenu.GetComponent<LandableMenu>().Start();
@@ -42,11 +43,25 @@ public class HUDManager : MonoBehaviour {
         toOpen.SetActive(true);
     }
 
+    public void toggleMap()
+    {
+        if (mapOpen)
+        {
+            Reset();
+        }
+        else
+        {
+            closeAll();
+            map.SetActive(true);
+        }
+        mapOpen = !mapOpen;
+    }
+
     public void closeAll()
     {
         hud.SetActive(false);
         worldMenu.SetActive(false);
         codeMenu.SetActive(false);
-        //map.SetActive(false);
+        map.SetActive(false);
     }
 }
