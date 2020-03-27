@@ -12,6 +12,9 @@ public class HUDManager : MonoBehaviour {
     public GameObject map;
     private bool mapOpen = false;
 
+    private float lastToggleTime = 0;
+    private float toggleTimeLamp = 0.25f;
+
     private void Start()
     {
         worldMenu.GetComponent<LandableMenu>().Start();
@@ -45,16 +48,19 @@ public class HUDManager : MonoBehaviour {
 
     public void toggleMap()
     {
-        if (mapOpen)
-        {
-            Reset();
+        if (Time.time - lastToggleTime > toggleTimeLamp) {
+            if (mapOpen)
+            {
+                Reset();
+            }
+            else
+            {
+                closeAll();
+                map.SetActive(true);
+            }
+            mapOpen = !mapOpen;
+            lastToggleTime = Time.time;
         }
-        else
-        {
-            closeAll();
-            map.SetActive(true);
-        }
-        mapOpen = !mapOpen;
     }
 
     public void closeAll()
