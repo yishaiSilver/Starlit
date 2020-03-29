@@ -26,7 +26,7 @@ public class HUDManager : MonoBehaviour {
         hud.SetActive(true);
     }
 
-    public void Land(GameObject ship, GameObject target)
+    public void Land(GameObject ship, LandableObject target)
     {
         closeAll();
         worldMenu.SetActive(true);
@@ -46,7 +46,7 @@ public class HUDManager : MonoBehaviour {
         toOpen.SetActive(true);
     }
 
-    public void toggleMap()
+    public void toggleMap(Ship ship)
     {
         if (Time.time - lastToggleTime > toggleTimeLamp) {
             if (mapOpen)

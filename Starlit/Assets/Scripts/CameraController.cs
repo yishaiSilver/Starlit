@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour {
 
     public void setCameraLayer(int layer)
     {
-        GetComponent<Camera>().cullingMask = (1 << layer) | (1 << 0);
+        GetComponent<Camera>().cullingMask = (1 << layer) | (1 << 0) | (1 << 5);
         minimapCamera.cullingMask = (1 << layer) | (1 << 0);
     }
 }

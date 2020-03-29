@@ -53,10 +53,10 @@ public class LandableMenu : MonoBehaviour {
         panelPlanetResources.text = stringPlanet + theWorld.resources;
     }
 
-    public void Enable(GameObject ship, GameObject world)
+    public void Enable(GameObject ship, LandableObject world)
     {
         theShip = ship.GetComponent<Ship>();
-        theWorld = world.GetComponent<LandableObject>();
+        theWorld = world;
         
         title.text = world.name.ToUpper();
 

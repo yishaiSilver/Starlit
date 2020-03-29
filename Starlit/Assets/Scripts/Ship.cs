@@ -31,10 +31,11 @@ public class Ship : MonoBehaviour
 
     //-----Ship Initiatives
     public Transform targetGlobal;
-    public GameObject[] landableObjects;
+    //public GameObject[] landableObjects;
+    private LandableObject[] landables;
 
     //------landing
-    public GameObject targetObject;
+    public LandableObject targetObject;
     public bool landing = false;
     private bool stoppedFirst = false;
     private bool landingTargetTargeted = false;
@@ -47,9 +48,7 @@ public class Ship : MonoBehaviour
     private bool notFullscale;
     //---------------------------
 
-    //-----World Interaction
-    public StarSystem starSystem;
-
+    //Current star system -------
     private GameObject overObject;
     public float currentCargo;
     public float cargoSize;
@@ -64,7 +63,9 @@ public class Ship : MonoBehaviour
 
     private Map map;
 
-    public StarSystem targetStar; // need to get rid of; integrate with actual map system
+    //-----World Interaction
+    public StarSystem starSystem;
+    private MapNode targetOnMap;
     private Stack<StarSystem> currentDirections;
 
     void Start()
@@ -107,7 +108,7 @@ public class Ship : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
             if (hit.collider != null)
             {
-                targetObject = hit.collider.gameObject;
+                targetObject = hit.collider.gameObject.GetComponent<LandableObject>();
                 landing = true;
                 SetLandingTargetText(hit.collider.gameObject);
             }
@@ -196,7 +197,7 @@ public class Ship : MonoBehaviour
         if (Input.GetKey(KeyCode.L))
         {
             targetObject = FindClosestLandableObject();
-            SetLandingTargetText(targetObject);
+            SetLandingTargetText(targetObject.gameObject);
             landing = true;
         }
 
@@ -258,6 +259,16 @@ public class Ship : MonoBehaviour
             return false;
     }
 
+    private bool LookAt(float targetAngle)
+    {
+        rotation = Mathf.MoveTowardsAngle(rotation, targetAngle, rotSpeed * Time.deltaTime);
+
+        if (rotation == targetAngle)
+            return true;
+        else
+            return false;
+    }
+
     public bool LookOpposite()
     {
         oppositeDirectionAngle = Mathf.Atan2(-rb2d.velocity.y, -rb2d.velocity.x) * Mathf.Rad2Deg;
@@ -290,16 +301,16 @@ public class Ship : MonoBehaviour
             return false;
     }
 
-    public GameObject FindClosestLandableObject()
+    public LandableObject FindClosestLandableObject()
     {
-        landableObjects = GameObject.FindGameObjectsWithTag("Landable");
+        landables = starSystem.GetLandables();
 
-        if (landableObjects.Length > 0)
+        if (landables.Length > 0)
         {
-            GameObject closest = landableObjects[0];
+            LandableObject closest = landables[0];
             float dist = Vector2.Distance(transform.position, closest.transform.position);
 
-            foreach (GameObject obj in landableObjects)
+            foreach (LandableObject obj in landables)
             {
                 if (Vector2.Distance(transform.position, obj.transform.position) < dist)
                 {
@@ -348,7 +359,7 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public bool Land(GameObject target)
+    public bool Land(LandableObject target)
     {
         //------Stopping
         if (!stoppedFirst && !Stop())
@@ -550,8 +561,90 @@ public class Ship : MonoBehaviour
         return rb2d.velocity;
     }
 
+    public StarSystem getStarSystem()
+    {
+        return starSystem;
+    }
+
     public void setJumpPath(Stack<StarSystem> directions)
     {
         currentDirections = directions;
+    }
+
+    public void setTargetOnMap(MapNode target)
+    {
+        targetOnMap = target;
+    }
+
+    public MapNode getTargetOnMap()
+    {
+        return targetOnMap;
+    }
+
+    public bool Jump()
+    {
+        //------Stopping
+        if (!stoppedFirst && !Stop())
+            return false;
+        else
+            stoppedFirst = true;
+        //--------------------------
+
+        //-------Turning
+        if (!landingTargetTargeted && !LookAt(target.transform))
+            return false;
+        else
+            landingTargetTargeted = true;
+        //---------------------------
+
+        //-------Thrusting to Target
+        if (!distanceToStop && !ThrustToTarget(target.transform))
+            return false;
+        else
+            distanceToStop = true;
+        //----------------------------
+
+        //-------Aligning with Target
+        if (!distanceToStop && !ThrustToTarget(target.transform))
+            return false;
+        else
+            distanceToStop = true;
+        //----------------------------
+
+        //--------Stopping at target
+        if (!Stop() && !stoppedAtTarget)
+            return false;
+        else
+        {
+            stoppedAtTarget = true;
+            thrusting = false;
+        }
+
+        //-------Aligning with Target and shrink
+        bool moved = MoveTowards(target.transform);
+        bool shrunk = Shrink();
+
+        if (!moved || !shrunk)
+            return false;
+        else // -------------------------------FINISHED
+        {
+            // reset landing bools
+            landing = false;
+            stoppedFirst = false;
+            landingTargetTargeted = false;
+            distanceToStop = false;
+            thrustingForLand = false;
+            stoppedAtTarget = false;
+
+            // the eagle has landed
+            landed = true;
+
+            if (playerController != null)
+                playerController.notifyOfLand(gameObject, target);
+            //
+            // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OPEN WORLD MENU
+            //
+            return true;
+        }
     }
 }

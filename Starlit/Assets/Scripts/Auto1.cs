@@ -41,7 +41,7 @@ class Auto1 : Auto
             targetInSystem = Random.Range(0, starSystem.NumOfLAndables());
         }
 
-        ship.targetObject = starSystem.GetLandables()[targetInSystem].gameObject;
+        ship.targetObject = starSystem.GetLandables()[targetInSystem];
 
         if (!ship.Land(ship.targetObject))
         {

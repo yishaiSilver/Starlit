@@ -72,23 +72,34 @@ public class Map : MonoBehaviour {
 
 	public void getStackTo(MapNode target)
 	{
-		getStackTo(allNodes[0], target);
+		getStackTo(defaultShip, target);
 	}
 
-	public Stack<MapNode> getStackTo(MapNode from, MapNode to)
+	public void getStackTo(Ship callingShip, MapNode to)
     {
 		//Debug.Log("Getting path from " + from.name + " to " + to.name + ".\n");
 
+		MapNode from = allNodes[callingShip.getStarSystem().getStarSystemIndex()];
+		callingShip.setTargetOnMap(to);
+
 		if(from == to)
 		{
-			return null;
+			callingShip.setJumpPath(null);
 		}
 
-		int[] bfsReturn = BFSShortestReach(from);
-		return retraceBFSPath(from, to, bfsReturn);
+		if (callingShip == defaultShip)
+		{
+			int[] bfsReturn = BFSShortestReach(from, true);
+			callingShip.setJumpPath(retraceBFSPath(from, to, bfsReturn, true));
+		}
+		else
+		{
+			int[] bfsReturn = BFSShortestReach(from, false);
+			callingShip.setJumpPath(retraceBFSPath(from, to, bfsReturn, false));
+		}
     }
 
-	public int[] BFSShortestReach(MapNode from)
+	public int[] BFSShortestReach(MapNode from, bool shouldDraw)
 	{
 		Queue<MapNode> q = new Queue<MapNode>();
 		q.Enqueue(from);
@@ -106,11 +117,15 @@ public class Map : MonoBehaviour {
 
 			for(int i = 0; i < neighbors.Length; i ++)
 			{
-				if(!haveVisited[neighbors[i].getNodeIndex()]) // issue
+				if (!haveVisited[neighbors[i].getNodeIndex()]) // issue
 				{
 					previousSystem[neighbors[i].getNodeIndex()] = currentNode.getNodeIndex();
 					haveVisited[neighbors[i].getNodeIndex()] = true;
-					currentNode.setLinkDefault(neighbors[i]);
+
+					if (shouldDraw) { 
+						currentNode.setLinkDefault(neighbors[i]);
+					}
+					
 					q.Enqueue(neighbors[i]);
 				}
 			}
@@ -119,16 +134,19 @@ public class Map : MonoBehaviour {
 		return previousSystem;
 	}
 
-	public Stack<MapNode> retraceBFSPath(MapNode from, MapNode to, int[] BFSOutput)
+	public Stack<StarSystem> retraceBFSPath(MapNode from, MapNode to, int[] BFSOutput, bool shouldDraw)
 	{
-		Stack<MapNode> directions = new Stack<MapNode>();
-
+		Stack<StarSystem> directions = new Stack<StarSystem>();
 		
 		for (int at = to.getNodeIndex(); at != BFSOutput[at]; at = BFSOutput[at])
 		{
-			Debug.Log(allNodes[at] + " -> " + allNodes[BFSOutput[at]]);
-			directions.Push(allNodes[at]);
-			allNodes[at].setLinkActive(allNodes[BFSOutput[at]]);
+			//Debug.Log(allNodes[at] + " -> " + allNodes[BFSOutput[at]]);
+			directions.Push(allNodes[at].thisStar);
+
+			if (shouldDraw)
+			{
+				allNodes[at].setLinkActive(allNodes[BFSOutput[at]]);
+			}
 		}
 
 		if(directions.Peek() == from)
@@ -137,5 +155,28 @@ public class Map : MonoBehaviour {
 		}
 
 		return directions;
+	}
+
+	public void setDefualtShip(Ship ship)
+	{
+		defaultShip = ship;
+	}
+
+	public void loadDirections()
+	{
+		loadDirections(defaultShip);
+	}
+
+	public void loadDirections(Ship callingShip)
+	{
+		MapNode from = allNodes[callingShip.getStarSystem().getStarSystemIndex()];
+		MapNode to = callingShip.getTargetOnMap();
+
+		int[] bfsReturn = BFSShortestReach(from, true);
+
+		if (from != to && to != null)
+		{
+			callingShip.setJumpPath(retraceBFSPath(from, to, bfsReturn, true));
+		}
 	}
 }

@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour {
     private HUDManager hudManager;
 
     public CameraController cam;
+    public Map map;
 
     private bool controlsEnabled = true;
 
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour {
         personalShip.setPlayerController(this);
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         hudManager = canvas.GetComponent<HUDManager>();
+        map.setDefaultShip(personalShip);
     }
 
     public void JumpToSystem(int layerInt)
@@ -53,7 +55,7 @@ public class PlayerController : MonoBehaviour {
         hudManager.Reset();
     }
 
-    public void notifyOfLand(GameObject ship, GameObject target)
+    public void notifyOfLand(GameObject ship, LandableObject target)
     {
         hudManager.Land(ship, target);
     }
@@ -84,6 +86,7 @@ public class PlayerController : MonoBehaviour {
 
     public void toggleMap()
     {
-        hudManager.toggleMap();
+        map.loadDirections();
+        hudManager.toggleMap(personalShip);
     }
 }

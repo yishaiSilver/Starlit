@@ -63,7 +63,7 @@ public class Turret : MonoBehaviour
         {
             if (true)
             {
-                Debug.Log("Lockon" + globalTarget.gameObject.name);
+                //Debug.Log("Locked on to: " + globalTarget.gameObject.name);
                 LockOn1(globalTarget.gameObject);
                 Vector3 leadedPosition = LockOn3(globalTarget.gameObject);
                 if (leadedPosition != new Vector3(0, 0, 0))

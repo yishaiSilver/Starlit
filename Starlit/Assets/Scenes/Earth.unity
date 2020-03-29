@@ -1658,17 +1658,15 @@ MonoBehaviour:
   code: 
   thrusting: 0
   targetGlobal: {fileID: 0}
-  landableObjects: []
   targetObject: {fileID: 0}
   landing: 0
-  starSystem: {fileID: 340620985}
   currentCargo: 0
   cargoSize: 5
   shipCode: 
   jumpDistance: 0
   jumpAcceleraltion: 0
   sprite: {fileID: 1414205538}
-  targetStar: {fileID: 1452198346}
+  starSystem: {fileID: 340620985}
 --- !u!50 &201341548
 Rigidbody2D:
   serializedVersion: 4
@@ -1952,17 +1950,15 @@ MonoBehaviour:
   code: 
   thrusting: 0
   targetGlobal: {fileID: 0}
-  landableObjects: []
   targetObject: {fileID: 0}
   landing: 0
-  starSystem: {fileID: 0}
   currentCargo: 0
   cargoSize: 0
   shipCode: 
   jumpDistance: 0
   jumpAcceleraltion: 0
   sprite: {fileID: 909874150}
-  targetStar: {fileID: 0}
+  starSystem: {fileID: 0}
 --- !u!50 &243897766
 Rigidbody2D:
   serializedVersion: 4
@@ -3829,7 +3825,7 @@ MonoBehaviour:
   - {fileID: 1335634237}
   - {fileID: 287418562}
   - {fileID: 257050705}
-  thisStar: {fileID: 0}
+  thisStar: {fileID: 340620985}
 --- !u!114 &465602219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5143,6 +5139,7 @@ MonoBehaviour:
   personalShip: {fileID: 201341547}
   starSystemManager: {fileID: 468811351}
   cam: {fileID: 519420030}
+  map: {fileID: 1060283651}
 --- !u!1 &711637771
 GameObject:
   m_ObjectHideFlags: 0
@@ -6531,17 +6528,15 @@ MonoBehaviour:
   code: 
   thrusting: 0
   targetGlobal: {fileID: 0}
-  landableObjects: []
   targetObject: {fileID: 0}
   landing: 0
-  starSystem: {fileID: 0}
   currentCargo: 0
   cargoSize: 0
   shipCode: 
   jumpDistance: 0
   jumpAcceleraltion: 0
   sprite: {fileID: 388333263}
-  targetStar: {fileID: 0}
+  starSystem: {fileID: 0}
 --- !u!4 &893185278
 Transform:
   m_ObjectHideFlags: 0
@@ -11173,7 +11168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1682121272
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11951,7 +11946,7 @@ MonoBehaviour:
   - {fileID: 200711016}
   - {fileID: 1335634237}
   - {fileID: 434363170}
-  thisStar: {fileID: 0}
+  thisStar: {fileID: 1452198346}
 --- !u!114 &1788072498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12512,7 +12507,7 @@ MonoBehaviour:
   - {fileID: 1788072497}
   - {fileID: 1789416062}
   - {fileID: 287418562}
-  thisStar: {fileID: 0}
+  thisStar: {fileID: 2101530802}
 --- !u!114 &2012815854
 MonoBehaviour:
   m_ObjectHideFlags: 0

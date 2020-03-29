@@ -41,6 +41,10 @@ public class MapNode : MonoBehaviour {
 	public void setNodeIndex(int i)
 	{
 		index = i;
+		if (thisStar != null)
+		{
+			thisStar.setStarSystemIndex(i);
+		}
 	}
 
 	public int getNodeIndex()
