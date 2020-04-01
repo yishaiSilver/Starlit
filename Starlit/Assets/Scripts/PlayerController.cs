@@ -31,7 +31,6 @@ public class PlayerController : MonoBehaviour {
 
     public void FixedUpdate()
     {
-        transform.position = personalShip.transform.position;
         if (controlsEnabled)
         {
             if (!personalShip.Manual())
