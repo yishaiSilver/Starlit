@@ -48,21 +48,6 @@ public class Ship : MonoBehaviour
     private bool notFullscale;
     //---------------------------
 
-    //-----Jumping
-    private bool jumping;
-    private float jumpTime = 1f;
-    private float jumpSpeed = 200f;
-    private float jumpExitSpeed = 2f;
-    private bool stoppedForJump = false;
-    private bool lookedAtStar = false;
-    private bool inHyperSpace = false;
-    private bool acceleratedForJump = false;
-    private bool jumped = false;
-    private float initAccelerationTime = -1;
-    private float jumpDistance;
-    private float jumpExitPositionRange = 10f;
-    //---------------------------
-
     //Current star system -------
     private GameObject overObject;
     public float currentCargo;
@@ -71,6 +56,9 @@ public class Ship : MonoBehaviour
     //private ShipScript script;
     //---------------------------
 
+    public float jumpDistance;
+    public float jumpAcceleraltion;
+
     public GameObject sprite;
 
     private Map map;
@@ -78,7 +66,7 @@ public class Ship : MonoBehaviour
     //-----World Interaction
     public StarSystem starSystem;
     private MapNode targetOnMap;
-    private Stack<MapJump> currentDirections;
+    private Stack<StarSystem> currentDirections;
 
     void Start()
     {
@@ -98,10 +86,6 @@ public class Ship : MonoBehaviour
         alignSpeed = 1f;
 
         //map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
-
-        float jumpDeacceleration = (jumpExitSpeed - jumpSpeed) / jumpTime;
-        jumpDistance = (jumpSpeed * jumpTime) + 0.5f * jumpDeacceleration * jumpTime * jumpTime;
-        Debug.Log(jumpDistance);
     }
 
     private void FixedUpdate()
@@ -143,12 +127,8 @@ public class Ship : MonoBehaviour
         {
             Vector2 direction = new Vector2(Mathf.Cos((rotation) * Mathf.Deg2Rad), Mathf.Sin((rotation) * Mathf.Deg2Rad));
             rb2d.AddForce(direction * thrust);
-
-            if (!jumping)
-            {
-                rb2d.velocity = Vector2.ClampMagnitude(rb2d.velocity, maxSpeed);
-            }
-
+            rb2d.velocity = Vector2.ClampMagnitude(rb2d.velocity, maxSpeed);
+            
             if(sprite.activeSelf)
                 animator.SetBool("Firing", true);
             
@@ -178,20 +158,11 @@ public class Ship : MonoBehaviour
         {
             MoveTowards(targetObject.transform);
         }
-
-        if (jumping)
-            Jump();
-
         Thrust();
     }
 
     public bool Manual()
     {
-        if (inHyperSpace)
-        {
-            return false;
-        }
-
         bool ret = false;
 
         // Accelerate
@@ -250,9 +221,11 @@ public class Ship : MonoBehaviour
             //currentDirections = map.getStackTo(starSystem, targetStar);
         }
 
-        if (!(currentDirections == null || currentDirections.Count == 0) && (jumping || Input.GetKey(KeyCode.J)))
+        if (Input.GetKey(KeyCode.J) && currentDirections.Count != 0)
         {
-            jumping = true;
+            //starSystemManager.TransferSystems(starSystem, currentDirections.Peek(), gameObject);
+            JumpToStarSystem(currentDirections.Peek());
+            starSystem = currentDirections.Pop();
         }
 
         if (Input.GetKey(KeyCode.M))
@@ -471,9 +444,6 @@ public class Ship : MonoBehaviour
         stoppedAtTarget = false;
         landed = false;
 
-        // reset jumping bools
-        jumping = false;
-
         shouldMaximize = true;
 
         ResetMenu();
@@ -596,7 +566,7 @@ public class Ship : MonoBehaviour
         return starSystem;
     }
 
-    public void setJumpPath(Stack<MapJump> directions)
+    public void setJumpPath(Stack<StarSystem> directions)
     {
         currentDirections = directions;
     }
@@ -611,112 +581,70 @@ public class Ship : MonoBehaviour
         return targetOnMap;
     }
 
-   public bool Jump()
+    public bool Jump()
     {
         //------Stopping
-        if (!stoppedForJump && !Stop())
+        if (!stoppedFirst && !Stop())
             return false;
         else
-            stoppedForJump = true;
+            stoppedFirst = true;
         //--------------------------
 
         //-------Turning
-        if (!lookedAtStar && !LookAt(currentDirections.Peek().getAngle()))
+        if (!landingTargetTargeted && !LookAt(target.transform))
             return false;
         else
-            lookedAtStar = true;
+            landingTargetTargeted = true;
         //---------------------------
 
-        //-------Accelerating
-        if (!acceleratedForJump && !JumpAccelerate(true)) {
-            inHyperSpace = true;
+        //-------Thrusting to Target
+        if (!distanceToStop && !ThrustToTarget(target.transform))
             return false;
-        }
         else
-            acceleratedForJump = true;
-        //--------------------------
+            distanceToStop = true;
+        //----------------------------
 
-        //--------Changing Star System
-        if (!jumped)
-        {
-            transform.position = getEntryPositionForJump();
-            JumpToStarSystem(currentDirections.Peek().getTargetStar());
-            starSystem = currentDirections.Pop().getTargetStar();
-            jumped = true;
-        }
-        //-------------------------
+        //-------Aligning with Target
+        if (!distanceToStop && !ThrustToTarget(target.transform))
+            return false;
+        else
+            distanceToStop = true;
+        //----------------------------
 
-        //-------Deaccelerating
-        if (!JumpAccelerate(false))
+        //--------Stopping at target
+        if (!Stop() && !stoppedAtTarget)
             return false;
         else
         {
-            jumping = (currentDirections.Count != 0) ? true : false;
-            stoppedForJump = false;
-            lookedAtStar = false;
-            acceleratedForJump = false;
-            jumped = false;
-            inHyperSpace = false;
+            stoppedAtTarget = true;
+            thrusting = false;
+        }
 
+        //-------Aligning with Target and shrink
+        bool moved = MoveTowards(target.transform);
+        bool shrunk = Shrink();
+
+        if (!moved || !shrunk)
+            return false;
+        else // -------------------------------FINISHED
+        {
+            // reset landing bools
+            landing = false;
+            stoppedFirst = false;
+            landingTargetTargeted = false;
+            distanceToStop = false;
+            thrustingForLand = false;
+            stoppedAtTarget = false;
+
+            // the eagle has landed
+            landed = true;
+
+            if (playerController != null)
+                playerController.notifyOfLand(gameObject, target);
+            //
+            // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OPEN WORLD MENU
+            //
             return true;
         }
-    }
-
-    public bool JumpAccelerate(bool enteringHyperspace)
-    {
-        if(initAccelerationTime == -1)
-        {
-            initAccelerationTime = Time.time;
-        }
-
-        float progress = (Time.time - initAccelerationTime) / jumpTime;
-
-        Vector2 direction = new Vector2(Mathf.Cos((rotation) * Mathf.Deg2Rad), Mathf.Sin((rotation) * Mathf.Deg2Rad));
-
-        if (enteringHyperspace) {
-            rb2d.velocity = Vector2.LerpUnclamped(new Vector2(0, 0), direction * jumpSpeed, progress);
-
-            //rb2d.velocity = Vector2.ClampMagnitude(rb2d.velocity, jumpSpeed);
-
-            if (rb2d.velocity.magnitude >= jumpSpeed)
-            {
-                initAccelerationTime = -1;
-                return true;
-            }
-        }
-        else
-        {
-            rb2d.velocity = Vector2.Lerp(direction * jumpSpeed, direction * jumpExitSpeed, progress);
-
-            if (rb2d.velocity.magnitude <= jumpExitSpeed)
-            {
-                rb2d.velocity = direction * jumpExitSpeed;
-                initAccelerationTime = -1;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    // SHOULD IMPLEMENT TIERED LAYERS HERE FOR HAVING MORE STAR SYSTEMS IN A SINGLE LAYER
-    public Vector3 getEntryPositionForJump()
-    {
-        Vector3 starLocation = currentDirections.Peek().getTargetStar().transform.position;
-        Vector3 endLocation = new Vector3(starLocation.x + Random.Range(-jumpExitPositionRange, jumpExitPositionRange),
-            starLocation.x + Random.Range(-jumpExitPositionRange, jumpExitPositionRange),
-            starLocation.z);
-
-        Debug.Log("End location: " + endLocation.x + ", " + endLocation.y);
-
-        Vector3 direction = new Vector2(Mathf.Cos((rotation + 180) * Mathf.Deg2Rad), Mathf.Sin((rotation + 180) * Mathf.Deg2Rad));
-        Vector3 exitJump = direction * jumpDistance;
-
-        Debug.Log("exitJump: " + exitJump.x + ", " + exitJump.y);
-
-        Vector3 exitSpot = endLocation + exitJump;
-
-
-        return exitSpot;
     }
 }

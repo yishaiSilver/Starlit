@@ -25,12 +25,13 @@ public class Map : MonoBehaviour {
 			allNodes[i].setNodeIndex(i);
 			allNodes[i].initializeLinks();
 			allNodes[i].setMap(this);
-			//Debug.Log(i + ": " + allNodes[i].name);
+			Debug.Log(i + ": " + allNodes[i].name);
 		}
 
 		drawAllLinks();
 
 		mapPanel.SetActive(false);
+		//getStackTo(allNodes[14], allNodes[0]);
 	}
 
 	public void setDefaultShip(Ship ship)
@@ -76,12 +77,12 @@ public class Map : MonoBehaviour {
 
 	public void getStackTo(Ship callingShip, MapNode to)
     {
+		//Debug.Log("Getting path from " + from.name + " to " + to.name + ".\n");
+
 		MapNode from = allNodes[callingShip.getStarSystem().getStarSystemIndex()];
 		callingShip.setTargetOnMap(to);
-		
-		//Debug.Log("Getting path from " + from.name + " to " + to.name + ".\n");
-		
-		if (from == to)
+
+		if(from == to)
 		{
 			callingShip.setJumpPath(null);
 		}
@@ -133,19 +134,14 @@ public class Map : MonoBehaviour {
 		return previousSystem;
 	}
 
-	public Stack<MapJump> retraceBFSPath(MapNode from, MapNode to, int[] BFSOutput, bool shouldDraw)
+	public Stack<StarSystem> retraceBFSPath(MapNode from, MapNode to, int[] BFSOutput, bool shouldDraw)
 	{
-		Stack<MapJump> directions = new Stack<MapJump>();
+		Stack<StarSystem> directions = new Stack<StarSystem>();
 		
 		for (int at = to.getNodeIndex(); at != BFSOutput[at]; at = BFSOutput[at])
 		{
 			//Debug.Log(allNodes[at] + " -> " + allNodes[BFSOutput[at]]);
-
-			Vector2 displacement = allNodes[at].transform.position - allNodes[BFSOutput[at]].transform.position;
-			float angle = Mathf.Atan2(displacement.y, displacement.x) * Mathf.Rad2Deg;
-			MapJump jump = new MapJump(allNodes[at].thisStar, angle);
-
-			directions.Push(jump);
+			directions.Push(allNodes[at].thisStar);
 
 			if (shouldDraw)
 			{
@@ -153,10 +149,10 @@ public class Map : MonoBehaviour {
 			}
 		}
 
-		/*if(directions.Peek() == from)
+		if(directions.Peek() == from)
 		{
 			return null;
-		}*/
+		}
 
 		return directions;
 	}
