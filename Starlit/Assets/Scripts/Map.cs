@@ -12,6 +12,9 @@ public class Map : MonoBehaviour {
 
 	public GameObject mapPanel;
 
+	public GameObject mapLink;
+
+
 	// Use this for initialization
 	void Start()
 	{
@@ -57,7 +60,7 @@ public class Map : MonoBehaviour {
 			{
 				if (links[i] == null)
 				{
-					MapLink link = currentNode.makeNewMapLink(i, defaultColor, activeColor);
+					MapLink link = currentNode.makeNewMapLink(mapLink, i, defaultColor, activeColor);
 					neighbors[i].setNewMapLink(currentNode, link);
 					if (!haveVisited[neighbors[i].getNodeIndex()])
 					{

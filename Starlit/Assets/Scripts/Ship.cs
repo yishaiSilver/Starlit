@@ -101,7 +101,6 @@ public class Ship : MonoBehaviour
 
         float jumpDeacceleration = (jumpExitSpeed - jumpSpeed) / jumpTime;
         jumpDistance = (jumpSpeed * jumpTime) + 0.5f * jumpDeacceleration * jumpTime * jumpTime;
-        Debug.Log(jumpDistance);
     }
 
     private void FixedUpdate()
@@ -567,7 +566,6 @@ public class Ship : MonoBehaviour
 
     public void JumpToStarSystem(StarSystem to)
     {
-        Debug.Log("Jumping to " + to.name);
         if(playerController != null)
         {
             playerController.JumpToSystem(to.getLayerInt());
@@ -707,12 +705,8 @@ public class Ship : MonoBehaviour
             starLocation.x + Random.Range(-jumpExitPositionRange, jumpExitPositionRange),
             starLocation.z);
 
-        Debug.Log("End location: " + endLocation.x + ", " + endLocation.y);
-
         Vector3 direction = new Vector2(Mathf.Cos((rotation + 180) * Mathf.Deg2Rad), Mathf.Sin((rotation + 180) * Mathf.Deg2Rad));
         Vector3 exitJump = direction * jumpDistance;
-
-        Debug.Log("exitJump: " + exitJump.x + ", " + exitJump.y);
 
         Vector3 exitSpot = endLocation + exitJump;
 

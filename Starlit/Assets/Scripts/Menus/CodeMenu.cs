@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+//using TMPro;
 
 public class CodeMenu : MonoBehaviour {
 
     public HUDManager hudManager;
 
     private GameObject codePanel;
-    public TMP_Text title;
-    public InGameCodeEditor.CodeEditor codeEditor;
+    public Text title;
+    //public InGameCodeEditor.CodeEditor codeEditor;
 
     public Ship ship;
     private GameObject parentMenu;
@@ -25,38 +25,38 @@ public class CodeMenu : MonoBehaviour {
         ship.playerController.disableControls();
         parentMenu = parent;
 
-        title.SetText(ship.name);
+        title.text = ship.name;
         
         if (!ship.shipCode.Equals(""))
         {
-            codeEditor.Text = ship.shipCode;
+            //codeEditor.Text = ship.shipCode;
         }
     }
 
     public void Disable()
     {
         ship.playerController.enableControls();
-        ship.shipCode = codeEditor.Text;
+        //ship.shipCode = codeEditor.Text;
         hudManager.closeSubMenu(gameObject, parentMenu);
     }
 
     public string GetCode()
     {
-        return codeEditor.Text;
+        return "";// codeEditor.Text;
     }
 
     public void UpdateSource()
     {
-        bool success = ship.UpdateCode(codeEditor.InputField.text);
+        //bool success = ship.UpdateCode(codeEditor.InputField.text);
 
-        if (success)
-        {
-            codePanel.transform.Find("PanelSuccess").gameObject.SetActive(true);
-        }
+        //if (success)
+        //{
+        //    codePanel.transform.Find("PanelSuccess").gameObject.SetActive(true);
+        //}
     }
 
     public void GiveFocus()
     {
-        codeEditor.InputField.ActivateInputField();
+        //codeEditor.InputField.ActivateInputField();
     }
 }

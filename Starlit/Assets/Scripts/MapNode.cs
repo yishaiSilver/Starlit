@@ -52,10 +52,10 @@ public class MapNode : MonoBehaviour {
 		return index;
 	}
 
-	public MapLink makeNewMapLink(int n, Color defaultColor, Color activeColor)
+	public MapLink makeNewMapLink(GameObject mapPanel, int n, Color defaultColor, Color activeColor)
 	{
 		links[n] = gameObject.AddComponent<MapLink>();
-		links[n].newMapLink(gameObject, gameObject, neighbors[n].gameObject, defaultColor, activeColor);
+		links[n].newMapLink(mapPanel, gameObject, gameObject, neighbors[n].gameObject, defaultColor, activeColor);
 		return links[n];
 	}
 
