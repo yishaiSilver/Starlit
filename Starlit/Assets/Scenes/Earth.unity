@@ -765,7 +765,7 @@ GameObject:
   - component: {fileID: 129096958}
   m_Layer: 9
   m_Name: Clipper
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4242,11 +4242,24 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "To do:\n-Make health bars, energy bar, shield bar\n-Look into preocedural
-    generation for planet art (dont want to make more than 50 planets individually)\n-Boids
-    drones would be really cool\n-Think about lidar system\n-Consolidate map system
-    (!!!!!!!!!)\n\t-Look into bounded star systems, 2 layers (up, down), grided\n-Clean
-    up HUD\n-Make multiplayer\n-Reinstall RosylnCSharp"
+  m_Text: 'To do:
+
+    -Make health bars, energy bar, shield bar
+
+    -Look into preocedural generation for planet art (dont want to make more than
+    50 planets individually)
+
+    -Boids drones would be really cool
+
+    -Think about lidar system
+
+    -Look into bounded star systems, 2 layers (up, down), grided
+
+    -Clean up HUD
+
+    -Make multiplayer
+
+    -Reinstall RosylnCSharp'
 --- !u!222 &492461586
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8336,8 +8349,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20.834991, y: 15.805006}
-  m_SizeDelta: {x: 19.27, y: 21.7}
+  m_AnchoredPosition: {x: 30.2, y: -24.675003}
+  m_SizeDelta: {x: 10.67, y: 12.02}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1207597040
 MonoBehaviour:
@@ -8415,7 +8428,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1207597038}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -11259,7 +11272,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1682121272
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13054,7 +13067,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 159.6, y: 0}
+  m_AnchoredPosition: {x: 159.3, y: 0}
   m_SizeDelta: {x: 8.8, y: 9.91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2013847376

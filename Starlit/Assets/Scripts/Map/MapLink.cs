@@ -33,11 +33,6 @@ public class MapLink : MonoBehaviour {
 
 		line = lineConnector.lr;
 
-		Debug.Log(line == null);
-
-		//line.LineThickness = width;
-		//line.material = new Material(Shader.Find("Particles/Additive"));
-
 		line.color = defaultColor;
 
 		RectTransform[] points = new RectTransform[] { (RectTransform)start.transform, (RectTransform)end.transform };
