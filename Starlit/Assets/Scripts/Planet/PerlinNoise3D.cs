@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PerlinNoise : MonoBehaviour {
+public class PerlinNoise3D : MonoBehaviour {
 
 	public float width;
 	public float height;
@@ -13,6 +13,8 @@ public class PerlinNoise : MonoBehaviour {
 
 	public float rotSpeed = 1;
 	private float offset = 0;
+
+	public bool is3d;
 
 	void Start()
 	{
@@ -35,7 +37,15 @@ public class PerlinNoise : MonoBehaviour {
 		{
 			for(int y = 0; y < height; y++)
 			{
-				Color color = CalculateColor3D(x, y);
+				Color color;
+				if (is3d)
+				{
+					color = CalculateColor(x, y);
+				}
+				else
+				{
+					color = CalculateColor3D(x, y);
+				}
 				texture.SetPixel(x, y, color);
 			}
 		}
@@ -65,7 +75,7 @@ public class PerlinNoise : MonoBehaviour {
 		x = Mathf.Cos(theta) * radius;
 		y = Mathf.Sin(theta) * radius;
 
-
+		/*
 		if (z <= 5)
 		{
 			float i = theta / (2 * Mathf.PI);
@@ -80,7 +90,7 @@ public class PerlinNoise : MonoBehaviour {
 		{ 
 			float i = ((y / radius) + 1) / (2);
 			return new Color(i, i, i);
-		}
+		}*/
 
 		px *= xScale;
 
@@ -92,26 +102,6 @@ public class PerlinNoise : MonoBehaviour {
 		z = z * yScale;
 		float grey = Perlin3D(x, y, z);
 
-		/*if (theta <= 0.01 * 2 * Mathf.PI)
-		{
-			return Color.green;
-		}
-		else if(theta >= 0.99 * 2 * Mathf.PI)
-		{
-			return Color.red;
-		}
-		/*else if(theta % 10 == 0 || theta % 10 == 1 || theta % 10 == 3)
-		{
-			return Color.red;
-		}
-		else if(grey > 0.5f)
-		{
-			return Color.black;
-		}
-		else
-		{
-			return Color.white;
-		}*/
 		return new Color(grey, grey, grey);
 	}
 
@@ -129,3 +119,24 @@ public class PerlinNoise : MonoBehaviour {
 		return abc / 6f;
 	}
 }
+
+/*if (theta <= 0.01 * 2 * Mathf.PI)
+{
+	return Color.green;
+}
+else if(theta >= 0.99 * 2 * Mathf.PI)
+{
+	return Color.red;
+}
+/*else if(theta % 10 == 0 || theta % 10 == 1 || theta % 10 == 3)
+{
+	return Color.red;
+}
+else if(grey > 0.5f)
+{
+	return Color.black;
+}
+else
+{
+	return Color.white;
+}*/

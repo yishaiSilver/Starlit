@@ -18,7 +18,6 @@ public class Ship : MonoBehaviour
     public float alignSpeed;
     public float shrinkSpeed;
     private Vector3 shipSize;
-    public string code;
     //--------------------------
 
     //-----Ship Attributes
@@ -27,6 +26,12 @@ public class Ship : MonoBehaviour
     private float rotation = 90;
     private float oppositeDirectionAngle;
     public bool thrusting = false;
+    private int batterySize;
+    private int shieldSize;
+    private int healthSize;
+    private int batteryStatus;
+    private int shieldStatus;
+    private int healthStatus;
     //--------------------------
 
     //-----Ship Initiatives
@@ -712,5 +717,20 @@ public class Ship : MonoBehaviour
 
 
         return exitSpot;
+    }
+
+    public float getShieldProportion()
+    {
+        return shieldStatus / shieldSize;
+    }
+
+    public float getBatteryProportion()
+    {
+        return batteryStatus / batterySize;
+    }
+
+    public float getHealthProportion()
+    {
+        return healthStatus / healthSize;
     }
 }
