@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Ship : MonoBehaviour
 {
+    public bool debug;
+
     private HUDManager hudManager;
     public PlayerController playerController;
     public StarSystemManager starSystemManager;
@@ -84,6 +86,9 @@ public class Ship : MonoBehaviour
     public StarSystem starSystem;
     private MapNode targetOnMap;
     private Stack<MapJump> currentDirections;
+
+    public GameObject debugIndicator;
+    public GameObject debugIndicator2;
 
     void Start()
     {
@@ -332,6 +337,70 @@ public class Ship : MonoBehaviour
             return false;
     }
 
+    public bool StopLook(Transform target)
+    {
+        Vector2 displacement = rb2d.velocity.normalized;
+        Vector3 estimatedPosition = new Vector3(displacement.x, displacement.y, 0);
+
+        Vector3 dir = target.position - transform.position;
+
+        float angleTarget = Mathf.Atan2(target.position.y, target.position.x) * Mathf.Rad2Deg;
+        float angleVelocity = Mathf.Atan2(rb2d.velocity.y, rb2d.velocity.x) * Mathf.Rad2Deg;
+
+        float theta = Mathf.Abs(angleVelocity - angleTarget);
+
+        float badVelocityComponent = Mathf.Sin(theta) * angleVelocity;
+        
+        float angleToTurn = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        rotation = Mathf.MoveTowardsAngle(rotation, angleToTurn, rotSpeed * Time.deltaTime);
+
+        if (debugIndicator != null)
+            debugIndicator.transform.position = dir + transform.position;
+        if (debugIndicator2 != null)
+            debugIndicator2.transform.position = estimatedPosition + transform.position;
+
+        /*float stopAngle = Mathf.Atan2(-rb2d.velocity.y, -rb2d.velocity.x) * Mathf.Rad2Deg;
+
+        var dir = target.position - transform.position;
+        float angleToTarget = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        float angleToTurn = Mathf.DeltaAngle(angleToTarget, stopAngle) / 2f + angleToTarget;
+        */
+
+        float angleToTarget = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        float angleVelocity = Mathf.Atan2(rb2d.velocity.y, rb2d.velocity.x) * Mathf.Rad2Deg;
+        if (Mathf.Abs(angleVelocity - angleToTarget) <= 10)
+            return true;
+        /*{
+
+            float delta = Vector2.Distance(target.transform.position, transform.position);
+            float timeToRotate = 180f / (rotSpeed);
+            float distToStop = (rb2d.velocity.magnitude * timeToRotate) + (Mathf.Pow(rb2d.velocity.magnitude, 2) / (2 * (thrust / rb2d.mass)));
+
+            if (debug)
+            {
+                Debug.Log(delta - distToStop);
+            }
+
+            if (delta - distToStop >= 0)
+            {
+                if(rotation == angleToTurn)
+                    thrusting = true;
+
+                return false;
+            }
+            else
+                return true;
+        }
+        if (rotation == angleToTurn)
+            thrusting = true;*/
+        if (rotation == angleToTurn)
+            thrusting = true;
+        return false;
+    }
+
     public LandableObject FindClosestLandableObject()
     {
         landables = starSystem.GetLandables();
@@ -393,6 +462,57 @@ public class Ship : MonoBehaviour
     public bool Land(LandableObject target)
     {
         //------Stopping
+        if (!stoppedFirst && !StopLook(target.transform))
+            return false;
+        else
+            stoppedFirst = true;
+        //--------------------------
+
+        if (!distanceToStop && !ThrustToTarget(target.transform))
+            return false;
+        else
+            distanceToStop = true;
+
+        //--------Stopping at target
+        if (!Stop() && !stoppedAtTarget)
+            return false;
+        else
+        {
+            stoppedAtTarget = true;
+            thrusting = false;
+        }
+
+        //-------Aligning with Target and shrink
+        bool moved = MoveTowards(target.transform);
+        bool shrunk = Shrink();
+
+        if (!moved || !shrunk)
+            return false;
+        else // -------------------------------FINISHED
+        {
+            // reset landing bools
+            landing = false;
+            stoppedFirst = false;
+            landingTargetTargeted = false;
+            distanceToStop = false;
+            thrustingForLand = false;
+            stoppedAtTarget = false;
+
+            // the eagle has landed
+            landed = true;
+            
+            if (playerController != null)
+                playerController.notifyOfLand(gameObject, target);
+            //
+            // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OPEN WORLD MENU
+            //
+            return true;
+        }
+    }
+
+    /*public bool Land(LandableObject target)
+    {
+        //------Stopping
         if (!stoppedFirst && !Stop())
             return false;
         else
@@ -447,7 +567,7 @@ public class Ship : MonoBehaviour
 
             // the eagle has landed
             landed = true;
-            
+
             if (playerController != null)
                 playerController.notifyOfLand(gameObject, target);
             //
@@ -455,7 +575,7 @@ public class Ship : MonoBehaviour
             //
             return true;
         }
-    }
+    }*/
 
     public void TakeOff()
     {
