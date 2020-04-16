@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PerlinNoise3D : MonoBehaviour {
 
-	public float spriteWidth;
-	public float spriteHeight;
-
 	public float width;
 	public float height;
 	public float yScale = 1;
@@ -25,9 +22,8 @@ public class PerlinNoise3D : MonoBehaviour {
 	}
 
 	void Update () {
-		SpriteRenderer rend = GetComponent<SpriteRenderer>();
-		//rend.material.mainTexture = GenerateTexture();
-		rend.sprite = Sprite.Create(GenerateTexture(), new Rect(0.0f, 0.0f, spriteWidth /  2, spriteHeight), new Vector2(0.5f, 0.5f), 100.0f);
+		Renderer rend = GetComponent<Renderer>();
+		rend.material.mainTexture = GenerateTexture();
 
 		offset = (offset + rotSpeed * Time.deltaTime) % (2 * Mathf.PI);
 	}
@@ -42,7 +38,7 @@ public class PerlinNoise3D : MonoBehaviour {
 			for(int y = 0; y < height; y++)
 			{
 				Color color;
-				if (!is3d)
+				if (is3d)
 				{
 					color = CalculateColor(x, y);
 				}
