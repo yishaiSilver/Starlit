@@ -459,7 +459,7 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public bool Land(LandableObject target)
+    /*public bool Land(LandableObject target)
     {
         //------Stopping
         if (!stoppedFirst && !StopLook(target.transform))
@@ -508,9 +508,9 @@ public class Ship : MonoBehaviour
             //
             return true;
         }
-    }
+    }*/
 
-    /*public bool Land(LandableObject target)
+    public bool Land(LandableObject target)
     {
         //------Stopping
         if (!stoppedFirst && !Stop())
@@ -575,7 +575,7 @@ public class Ship : MonoBehaviour
             //
             return true;
         }
-    }*/
+    }
 
     public void TakeOff()
     {

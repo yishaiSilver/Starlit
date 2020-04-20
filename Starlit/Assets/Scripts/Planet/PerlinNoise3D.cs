@@ -9,12 +9,21 @@ public class PerlinNoise3D : MonoBehaviour {
 	public float yScale = 1;
 	public float xScale = 1;
 
-	public float radius = 10;
-
 	public float rotSpeed = 1;
 	private float offset = 0;
 
+	public float greyThreshold;
+
 	public bool is3d;
+
+	public float radius;
+	public float xCenter;
+	public float yCenter;
+
+	public bool isLeft;
+
+	public float bubbleWidth;
+	public float bubbleHeight;
 
 	void Start()
 	{
@@ -31,14 +40,18 @@ public class PerlinNoise3D : MonoBehaviour {
 	private Texture2D GenerateTexture()
 	{
 		Texture2D texture = new Texture2D((int)width, (int)height);
-		
-		
-		for(int x = 0; x < width; x++)
+
+		drawCircle(texture, radius, xCenter, yCenter, isLeft);
+
+		PlanetBubble planetBubble = new PlanetBubble(texture, xCenter, yCenter, bubbleWidth, bubbleHeight);
+		planetBubble.draw(Color.yellow);
+
+		/*for(int x = 0; x < width; x++)
 		{
 			for(int y = 0; y < height; y++)
 			{
 				Color color;
-				if (is3d)
+				if (!is3d)
 				{
 					color = CalculateColor(x, y);
 				}
@@ -48,7 +61,7 @@ public class PerlinNoise3D : MonoBehaviour {
 				}
 				texture.SetPixel(x, y, color);
 			}
-		}
+		}*/
 
 		texture.Apply();
 
@@ -60,9 +73,29 @@ public class PerlinNoise3D : MonoBehaviour {
 		x = x / width * xScale;
 		y = y / width * yScale;
 
-		float grey = Mathf.PerlinNoise(x, y);
-
-		return new Color(grey, grey, grey);
+		float grey = 1 - (((int)(Mathf.PerlinNoise(x, y) * 6f)) / 5f);
+		
+		if (grey < 0.4f)
+		{
+			return Color.blue;
+		}
+		else if (grey < 0.6f)
+		{
+			return Color.cyan;
+		}
+		else if (grey < 0.8f)
+		{
+			return Color.yellow;
+		}
+		else if (grey <= 1)
+		{
+			return Color.green;
+		}
+		else
+		{
+			return new Color(grey, grey, grey); ;
+		}
+		
 	}
 
 	private Color CalculateColor3D(float x, float y)
@@ -118,7 +151,56 @@ public class PerlinNoise3D : MonoBehaviour {
 		float abc = ab + bc + ac + ba + cb + ca;
 		return abc / 6f;
 	}
+
+	public void drawCircle(Texture2D texture, float radius, float xCenter, float yCenter, bool isLeftSide)
+	{
+		for (int x = (int)(xCenter - radius); x <= (int)(xCenter + radius); x++)
+		{
+			if(x < xCenter)
+				continue;
+
+			for (int y = (int)(yCenter - radius); y <= (int)(yCenter + radius); y++)
+			{
+				Color color;
+
+				bool isValid = Mathf.Pow(x - xCenter, 2) + Mathf.Pow(y - yCenter, 2) < radius * radius;
+
+				if (isValid)
+				{
+					color = Color.black;
+					texture.SetPixel(x, y, color);
+				}
+
+			}
+		}
+		
+	}
+
+	public void makeRound(Texture2D texture, float radius, float xCenter, float yCenter, bool isLeftSide)
+	{
+		for (int x = 0; x <= (int)(xCenter + radius); x++)
+		{
+			if (x < xCenter)
+				continue;
+
+			for (int y = (int)(yCenter - radius); y <= (int)(yCenter + radius); y++)
+			{
+				Color color;
+
+				bool isValid = Mathf.Pow(x - xCenter, 2) + Mathf.Pow(y - yCenter, 2) < radius * radius;
+
+				if (isValid)
+				{
+					color = Color.black;
+					texture.SetPixel(x, y, color);
+				}
+
+			}
+		}
+
+	}
 }
+
 
 /*if (theta <= 0.01 * 2 * Mathf.PI)
 {
