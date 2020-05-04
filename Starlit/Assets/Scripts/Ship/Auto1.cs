@@ -12,8 +12,8 @@ using System.Collections;
 
 class Auto1 : Auto
 {
-    private const int waitLowerBound = 1;
-    private const int waitUpperBound = 15;
+    private const int waitLowerBound = 2;
+    private const int waitUpperBound = 5;
 
     public Ship ship;
     public StarSystem starSystem;

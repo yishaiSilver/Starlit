@@ -85,7 +85,7 @@ public class Turret : MonoBehaviour
 
 
 
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (Input.GetKey(KeyCode.Mouse1))
         {
             shoot();
         }
