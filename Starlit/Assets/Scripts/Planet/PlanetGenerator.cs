@@ -1,8 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlanetGenerator : MonoBehaviour {
+public class PlanetGenerator : MonoBehaviour
+{
 
 	public float radius;
 	public float height;
@@ -16,13 +16,34 @@ public class PlanetGenerator : MonoBehaviour {
 	private SpriteRenderer rend;
 	private Sprite sprite;
 
-	private float  xOffset = 0;
+	private float xOffset = 0;
 	public float xSpeed;
 
 	private ArrayList bubbles;
 
 
-	Texture2D texture;
+	private Texture2D texture;
+
+	private Texture2D textureBase;
+
+	private Texture2D textureOne;
+	private Texture2D textureTwo;
+	private Texture2D textureThree;
+
+
+	public bool isPreloaded;
+
+	public Color baseColor;
+	public Color layerOneColor;
+	public Color layerTwoColor;
+	public Color layerThreeColor;
+
+	public int layerOneSpeed;
+	public int layerTwoSpeed;
+	public int layerThreeSpeed;
+
+	[SerializeField]
+	public PlanetBubble[] bubblesLayerOne;
 
 	void Start()
 	{
@@ -43,17 +64,28 @@ public class PlanetGenerator : MonoBehaviour {
 		spriteMask.sprite = maskSprite;
 
 		bubbles = new ArrayList();
+
+		for (int i = 0; i < 7; i ++)
+		{
+			spawnBubble(texture, 40, 80, true, 1);
+		}
 		for (int i = 0; i < 7; i++)
 		{
-			spawnBubble(texture, 40, 50, false);
+			spawnBubble(texture, 40, 80, true, 2);
+		}
+		for (int i = 0; i < 7; i++)
+		{
+			spawnBubble(texture, 40, 80, true, 3);
 		}
 	}
 
 	void Update()
 	{
+
 		xOffset = (xOffset + xSpeed * Time.deltaTime) % width;
 		Texture2D texture = GenerateTexture();
 		sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
+
 		rend.sprite = sprite;
 	}
 
@@ -63,10 +95,14 @@ public class PlanetGenerator : MonoBehaviour {
 		//drawCircle(texture, radius, xCenter, yCenter, isLeft);
 		//clearSprite(texture);
 
-		PlanetBubble planetBubble = new PlanetBubble(texture, xCenter + xOffset, yCenter, bubbleWidth, bubbleHeight);
+		//PlanetBubble planetBubble = new PlanetBubble(texture, xCenter + xOffset, yCenter, bubbleWidth, bubbleHeight);
+
+
+		makeBase(texture);
+
 		foreach (PlanetBubble bubble in bubbles)
 		{
-			bubble.draw(new Color(0, 255, 0, 0.5f));
+			bubble.draw();
 		}
 
 		texture.Apply();
@@ -76,11 +112,23 @@ public class PlanetGenerator : MonoBehaviour {
 
 	private void clearSprite(Texture2D texture)
 	{
-		for(int x = 0; x < texture.width; x++)
+		for (int x = 0; x < texture.width; x++)
 		{
-			for(int y = 0; y < texture.height; y++)
+			for (int y = 0; y < texture.height; y++)
 			{
 				texture.SetPixel(x, y, new Color(0, 0, 0, 0));
+			}
+		}
+	}
+
+
+	private void makeBase(Texture2D texture)
+	{
+		for (int x = 0; x < texture.width; x++)
+		{
+			for (int y = 0; y < texture.height; y++)
+			{
+				texture.SetPixel(x, y, baseColor);
 			}
 		}
 	}
@@ -105,60 +153,63 @@ public class PlanetGenerator : MonoBehaviour {
 		}
 	}
 
-	private void spawnBubble(Texture2D texture, float minHeight, float maxHeight, bool allowOverlap)
+	private void spawnBubble(Texture2D texture, float minHeight, float maxHeight, bool allowOverlap, int layer)
 	{
 		int numTries = 0;
 
-		while (numTries < 5)
+		while (true)
 		{
+			bool shouldRedo = false;
+
 			float xCenter = Random.Range(0, width);
 			float yCenter = Random.Range(0, height);
 
 			float bubbleHeight = Random.Range(minHeight, maxHeight);
 			//float bubbleWidth = 0;
 			float bubbleWidth = Random.Range(bubbleHeight * 1.5f, bubbleHeight * 3f);
+		
+			PlanetBubble planetBubble = new PlanetBubble(texture, xCenter, yCenter, bubbleWidth, bubbleHeight, layerOneSpeed, layerOneColor);
+
+			switch (layer) {
+				case 1:
+					planetBubble = new PlanetBubble(texture, xCenter, yCenter, bubbleWidth, bubbleHeight, layerOneSpeed, layerOneColor);
+					break;
+				case 2:
+					planetBubble = new PlanetBubble(texture, xCenter, yCenter, bubbleWidth, bubbleHeight, layerTwoSpeed, layerTwoColor);
+					break;
+				case 3:
+					planetBubble = new PlanetBubble(texture, xCenter, yCenter, bubbleWidth, bubbleHeight, layerThreeSpeed, layerThreeColor);
+					break;
+				default:
+					break;
+			}
 
 			if (!allowOverlap)
 			{
-				Debug.Log("new iteration");
-				bool shouldRedo = false;
-
-				int tlx = (int)(xCenter - bubbleWidth / 2f);
-				int tly = (int)(yCenter + bubbleHeight / 2f);
-
-				int blx = (int)(xCenter - bubbleWidth / 2f);
-				int bly = (int)(yCenter - bubbleHeight / 2f);
-
-				int trx = (int)(xCenter + bubbleWidth / 2f);
-				int ytr = (int)(yCenter + bubbleHeight / 2f); // try
-
-				int brx = (int)(xCenter + bubbleWidth / 2f);
-				int bry = (int)(yCenter - bubbleHeight / 2f);
-
 				foreach (PlanetBubble bubble in bubbles)
 				{
-					if(bubble.containsPoint(tlx, tly) || bubble.containsPoint(blx, bly) || bubble.containsPoint(trx, ytr) || bubble.containsPoint(brx, bry)){
+					if (bubble.isOverlapping(planetBubble) || planetBubble.isOverlapping(bubble))
+					{
 						shouldRedo = true;
 						break;
 					}
 				}
-				
+
 				if (shouldRedo)
 				{
+					planetBubble.draw();
 					numTries++;
 					Debug.Log("Overlap detected");
+					continue;
 				}
 				else
 				{
-					PlanetBubble planetBubble = new PlanetBubble(texture, xCenter, yCenter, bubbleWidth, bubbleHeight);
 					bubbles.Add(planetBubble);
-					Debug.Log("Added bubble");
 					break;
 				}
 			}
 			else
 			{
-				PlanetBubble planetBubble = new PlanetBubble(texture, xCenter, yCenter, bubbleWidth, bubbleHeight);
 				bubbles.Add(planetBubble);
 				break;
 			}

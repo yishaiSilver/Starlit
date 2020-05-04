@@ -43,8 +43,8 @@ public class PerlinNoise3D : MonoBehaviour {
 
 		drawCircle(texture, radius, xCenter, yCenter, isLeft);
 
-		PlanetBubble planetBubble = new PlanetBubble(texture, xCenter, yCenter, bubbleWidth, bubbleHeight);
-		planetBubble.draw(Color.yellow);
+		//PlanetBubble planetBubble = new PlanetBubble(texture, xCenter, yCenter, bubbleWidth, bubbleHeight);
+		//planetBubble.draw();
 
 		/*for(int x = 0; x < width; x++)
 		{

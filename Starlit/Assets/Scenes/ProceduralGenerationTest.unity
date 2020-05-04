@@ -407,6 +407,14 @@ MonoBehaviour:
   bubbleWidth: 100
   bubbleHeight: 50
   xSpeed: 100
+  isPreloaded: 0
+  baseColor: {r: 0.5764706, g: 0.3529412, b: 0.32156864, a: 1}
+  layerOneColor: {r: 0.73333335, g: 0.5176471, b: 0.43529412, a: 0.69803923}
+  layerTwoColor: {r: 0.96862745, g: 0.7294118, b: 0.5019608, a: 0.69803923}
+  layerThreeColor: {r: 0.9882353, g: 0.8509804, b: 0.5921569, a: 0.69803923}
+  layerOneSpeed: 10
+  layerTwoSpeed: 20
+  layerThreeSpeed: 30
 --- !u!212 &2020707236
 SpriteRenderer:
   m_ObjectHideFlags: 0
